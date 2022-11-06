@@ -55,6 +55,10 @@ if ! shopt -oq posix; then
   fi
 fi
 
+export BASE_DIR=/vault
+
+PATH=$PATH:$BASE_DIR/code/shell
+
 HOST=$(\hostname)
 
 export bld=$(tput bold)

@@ -1,9 +1,3 @@
-Andrasko, Stephen <Stephen.Andrasko@zywave.com>
-	
-4:28 PM (4 hours ago)
-	
-to me
-
 set paste
 
 set formatoptions=
