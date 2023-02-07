@@ -1,4 +1,5 @@
 alias BASE_DIR='/vault'
+alias storage='cd /mnt/storage/vault'
 alias ll='ls -lart'
 alias vault='cd /vault'
 alias back='cd $BASE_DIR/backups'
