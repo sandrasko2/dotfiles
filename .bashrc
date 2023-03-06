@@ -57,7 +57,7 @@ fi
 
 export BASE_DIR=/vault
 
-PATH=$PATH:$BASE_DIR/code/shell
+PATH=$PATH:$BASE_DIR/code/shell:.local/bin
 
 HOST=$(\hostname)
 
