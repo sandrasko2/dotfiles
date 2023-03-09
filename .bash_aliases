@@ -1,3 +1,4 @@
+#!/bin/bash
 alias BASE_DIR='/vault'
 alias storage='cd /mnt/storage/vault'
 alias ll='ls -lart'
@@ -17,6 +18,7 @@ alias python='python3'
 alias ans-decrypt='ansible-vault decrypt'
 alias ans-encrypt='ansible-vault encrypt'
 alias ans-play='ansible-playbook'
+alias gs='git status'
 alias gap='git add -p'
 alias gall='git add -A'
-alias commit='git commit -m'
+alias gc='git commit -m'
