@@ -17,7 +17,11 @@ alias code='cd $BASE_DIR/code'
 alias xlog='cd $BASE_DIR/logs'
 alias xsh='cd /vault/code/shell'
 alias ddata='cd $BASE_DIR/docker-data'
-alias dfiles='cd /vault/docker-files'
+if [ "$(hostname)" = "hl-ubsrv-media-01" ]; then
+    alias dfiles='cd /vault/docker-files/traefik'
+else
+    alias dfiles='cd /vault/docker-files/monolith'
+fi
 alias media='cd /mnt/storage/vault/media'
 
 # ---------------------------------------------------------------------------
