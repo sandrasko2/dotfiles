@@ -1,6 +1,6 @@
 # Dotfiles
 
-Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlinks and deployed across LAN machines with Gitea Actions + Ansible.
+Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlinks and deployed across LAN machines with Ansible.
 
 ## Files
 
@@ -13,7 +13,6 @@ Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlink
 | `.tmux.conf` | Tmux: Ctrl-a prefix, vim nav, mouse, TPM with resurrect/continuum |
 | `.gitconfig` | Git: aliases, vimdiff, sensible defaults, local include for identity |
 | `install.sh` | Bootstrap: symlinks dotfiles, installs vim-plug, TPM, fzf |
-| `deploy/` | Ansible playbook + inventory for CI/CD deployment |
 
 ## Quick Start
 
@@ -56,14 +55,11 @@ Git identity (required — `.gitconfig` includes this automatically):
     email = you@example.com
 ```
 
-## CI/CD Deployment
+## Automated Sync
 
-On push to `main`, a Gitea Actions workflow runs an Ansible playbook that deploys dotfiles to all LAN machines listed in `deploy/inventory.yml`. See the [deploy/](deploy/) directory for details.
-
-**Setup requirements:**
-- A Gitea Actions runner with SSH access to target machines
-- SSH private key stored as Gitea Actions secret `DEPLOY_SSH_KEY`
-- Target machines listed in `deploy/inventory.yml`
+Deployment is managed by the Ansible repo via a systemd timer that runs
+`git pull --ff-only` and re-runs `install.sh` every 15 minutes. See the
+`dotfiles` role in the Ansible repo for details.
 
 ## Tmux Quick Reference
 
