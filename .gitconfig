@@ -1,0 +1,43 @@
+[include]
+    path = ~/.gitconfig.local
+
+[core]
+    editor = vim
+    autocrlf = input
+    pager = less -FRX
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[pull]
+    rebase = true
+
+[fetch]
+    prune = true
+
+[diff]
+    tool = vimdiff
+    colorMoved = default
+
+[merge]
+    tool = vimdiff
+    conflictstyle = diff3
+
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    ca = commit --amend
+    lg = log --oneline --graph --decorate -20
+    last = log -1 HEAD
+    unstage = reset HEAD --
+    undo = reset --soft HEAD~1
+    wip = !git add -A && git commit -m 'WIP'
+
+[color]
+    ui = auto
