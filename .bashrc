@@ -1,7 +1,4 @@
-#!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
-# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
-# for examples
 
 # If not running interactively, don't do anything
 case $- in
@@ -9,64 +6,100 @@ case $- in
       *) return;;
 esac
 
-# don't put duplicate lines or lines starting with space in the history.
-# See bash(1) for more options
+# ---------------------------------------------------------------------------
+# History
+# ---------------------------------------------------------------------------
 HISTCONTROL=ignoreboth
-
-# append to the history file, don't overwrite it
+HISTSIZE=50000
+HISTFILESIZE=100000
+HISTTIMEFORMAT="%F %T  "
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=1000
-HISTFILESIZE=2000
-
-# check the window size after each command and, if necessary,
-# update the values of LINES and COLUMNS.
+# ---------------------------------------------------------------------------
+# Shell options
+# ---------------------------------------------------------------------------
 shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
+shopt -s globstar
+shopt -s cdspell
+shopt -s dirspell
+shopt -s autocd
+shopt -s cmdhist
+shopt -s no_empty_cmd_completion
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
+# ---------------------------------------------------------------------------
+# Color support
+# ---------------------------------------------------------------------------
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+    alias diff='diff --color=auto'
+    alias ip='ip -color=auto'
+fi
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
+# ---------------------------------------------------------------------------
+# Prompt — 2-line with git branch
+# ---------------------------------------------------------------------------
+__git_branch() {
+    local branch
+    branch=$(git symbolic-ref --short HEAD 2>/dev/null || git describe --tags --exact-match 2>/dev/null)
+    [ -n "$branch" ] && printf ' (%s)' "$branch"
+}
+
+HOST=$(\hostname)
+
+PS1='\n'
+PS1+='\[\e[1;32m\](\u@${HOST})\[\e[0m\]'   # user@host in bold green
+PS1+=':\[\e[1;34m\]\w\[\e[0m\]'              # working dir in bold blue
+PS1+='\[\e[0;33m\]$(__git_branch)\[\e[0m\]'  # git branch in yellow
+PS1+='\n'
+PS1+='[\A] \$ '                               # time + prompt char
+
+# ---------------------------------------------------------------------------
+# Environment
+# ---------------------------------------------------------------------------
+export BASE_DIR=/vault
+PATH=$PATH:$BASE_DIR/code/shell:~/.local/bin
+
+# Alert alias for long running commands (sleep 10; alert)
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
+# ---------------------------------------------------------------------------
+# Aliases
+# ---------------------------------------------------------------------------
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-# enable programmable completion features (you don't need to enable
-# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
-# sources /etc/bash.bashrc).
+# ---------------------------------------------------------------------------
+# Bash completion
+# ---------------------------------------------------------------------------
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+    fi
 fi
 
-export BASE_DIR=/vault
+# ---------------------------------------------------------------------------
+# Nix package manager
+# ---------------------------------------------------------------------------
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+fi
 
-PATH=$PATH:$BASE_DIR/code/shell:~/.local/bin
+# ---------------------------------------------------------------------------
+# fzf integration
+# ---------------------------------------------------------------------------
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
-HOST=$(\hostname)
-
-export bld=$(tput bold)
-
-export shy=$(tput rmso)
-
-export PS1='
-
-${bld}($USER/$HOST):$PWD
-[$(date +%R)] ${shy}'
+# ---------------------------------------------------------------------------
+# Local overrides (machine-specific, not tracked in git)
+# ---------------------------------------------------------------------------
+[ -f ~/.bashrc.local ] && source ~/.bashrc.local

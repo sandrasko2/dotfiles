@@ -1,0 +1,35 @@
+# ~/.inputrc — Readline configuration
+
+# Case-insensitive tab completion
+set completion-ignore-case on
+
+# Treat hyphens and underscores as equivalent during completion
+set completion-map-case on
+
+# Show all completions on first Tab (no double-tap)
+set show-all-if-ambiguous on
+
+# Color completions by file type (like ls)
+set colored-stats on
+set colored-completion-prefix on
+
+# Don't ring the bell
+set bell-style none
+
+# Show file type indicator in completions (/ for dirs, etc.)
+set visible-stats on
+
+# Don't page through completions
+set page-completions off
+
+# Up/Down arrow: search history based on typed prefix
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+
+# Ctrl+Left/Right for word navigation
+"\e[1;5D": backward-word
+"\e[1;5C": forward-word
+
+# Alt+Left/Right for word navigation (alternate terminals)
+"\e[1;3D": backward-word
+"\e[1;3C": forward-word
