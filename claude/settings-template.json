@@ -1,0 +1,25 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "deny": [
+      "Bash(rm *)",
+      "Bash(sudo rm *)",
+      "Bash(find * -delete *)",
+      "Bash(find * -delete)",
+      "Bash(find * -exec rm *)",
+      "Bash(sudo find * -delete *)",
+      "Bash(sudo find * -delete)",
+      "Bash(sudo find * -exec rm *)",
+      "Bash(git push --force *)",
+      "Bash(git reset --hard *)",
+      "Bash(git checkout -- *)",
+      "Bash(git clean *)"
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash $HOME/.claude/statusline-command.sh"
+  }
+}

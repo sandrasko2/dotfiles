@@ -93,13 +93,80 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Create vim undo directory
+# 5. Claude Code (agents, skills, statusline)
+# ---------------------------------------------------------------------------
+CLAUDE_DIR="$HOME/.claude"
+CLAUDE_SRC="$DOTFILES_DIR/claude"
+
+if [ -d "$CLAUDE_SRC" ]; then
+    info "Setting up Claude Code config..."
+
+    mkdir -p "$CLAUDE_DIR/agents"
+    mkdir -p "$CLAUDE_DIR/skills/tdd"
+    mkdir -p "$CLAUDE_DIR/skills/improve-structure"
+
+    # Symlink CLAUDE.md and statusline
+    for file in CLAUDE.md statusline-command.sh; do
+        src="$CLAUDE_SRC/$file"
+        dest="$CLAUDE_DIR/$file"
+        if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
+            ok "claude/$file already linked"
+        else
+            backup_file "$dest"
+            ln -sf "$src" "$dest"
+            ok "claude/$file → $src"
+        fi
+    done
+
+    # Symlink agents
+    for agent in "$CLAUDE_SRC"/agents/*.md; do
+        name="$(basename "$agent")"
+        dest="$CLAUDE_DIR/agents/$name"
+        if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$agent")" ]; then
+            ok "claude/agents/$name already linked"
+        else
+            backup_file "$dest"
+            ln -sf "$agent" "$dest"
+            ok "claude/agents/$name → $agent"
+        fi
+    done
+
+    # Symlink skills
+    for skill_dir in "$CLAUDE_SRC"/skills/*/; do
+        skill_name="$(basename "$skill_dir")"
+        src="$skill_dir/SKILL.md"
+        dest="$CLAUDE_DIR/skills/$skill_name/SKILL.md"
+        if [ -f "$src" ]; then
+            mkdir -p "$CLAUDE_DIR/skills/$skill_name"
+            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
+                ok "claude/skills/$skill_name already linked"
+            else
+                backup_file "$dest"
+                ln -sf "$src" "$dest"
+                ok "claude/skills/$skill_name → $src"
+            fi
+        fi
+    done
+
+    # Settings: copy template ONLY if no settings.json exists
+    if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
+        cp "$CLAUDE_SRC/settings-template.json" "$CLAUDE_DIR/settings.json"
+        ok "settings.json created from template (add secrets to env block)"
+    else
+        ok "settings.json exists — skipping (compare with $CLAUDE_SRC/settings-template.json for updates)"
+    fi
+else
+    warn "No claude/ directory in dotfiles — skipping Claude Code setup"
+fi
+
+# ---------------------------------------------------------------------------
+# 6. Create vim undo directory
 # ---------------------------------------------------------------------------
 mkdir -p "$HOME/.vim/undodir"
 ok "~/.vim/undodir exists"
 
 # ---------------------------------------------------------------------------
-# Done
+# 7. Done
 # ---------------------------------------------------------------------------
 echo ""
 info "Installation complete!"
