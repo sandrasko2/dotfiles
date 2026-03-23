@@ -31,3 +31,13 @@ Pick the cheapest model that can do the job:
 ### Parallelism
 
 When multiple independent pieces of information are needed, launch multiple agents in parallel rather than sequentially. For example, if you need to check a compose file AND a Caddyfile route, spin up two agents simultaneously.
+
+## Compact Preservation
+
+When context compacts, always preserve:
+- List of modified files with full paths
+- Current git branch and uncommitted change count
+- Active plan file path and current phase
+- Pending tasks (from TaskList)
+- Key architectural decisions made this session
+- Any vault/secret variable names referenced (not values)

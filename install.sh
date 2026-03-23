@@ -93,7 +93,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Claude Code (agents, skills, statusline)
+# 5. Claude Code (agents, skills, hooks, commands, rules, statusline)
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
 CLAUDE_SRC="$DOTFILES_DIR/claude"
@@ -147,6 +147,54 @@ if [ -d "$CLAUDE_SRC" ]; then
             fi
         fi
     done
+
+    # Symlink hook scripts
+    if [ -d "$CLAUDE_SRC/hooks/scripts" ]; then
+        mkdir -p "$CLAUDE_DIR/hooks/scripts"
+        for script in "$CLAUDE_SRC"/hooks/scripts/*.sh; do
+            name="$(basename "$script")"
+            dest="$CLAUDE_DIR/hooks/scripts/$name"
+            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$script")" ]; then
+                ok "claude/hooks/scripts/$name already linked"
+            else
+                backup_file "$dest"
+                ln -sf "$script" "$dest"
+                ok "claude/hooks/scripts/$name → $script"
+            fi
+        done
+    fi
+
+    # Symlink commands
+    if [ -d "$CLAUDE_SRC/commands" ]; then
+        mkdir -p "$CLAUDE_DIR/commands"
+        for cmd in "$CLAUDE_SRC"/commands/*.md; do
+            name="$(basename "$cmd")"
+            dest="$CLAUDE_DIR/commands/$name"
+            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$cmd")" ]; then
+                ok "claude/commands/$name already linked"
+            else
+                backup_file "$dest"
+                ln -sf "$cmd" "$dest"
+                ok "claude/commands/$name → $cmd"
+            fi
+        done
+    fi
+
+    # Symlink rules
+    if [ -d "$CLAUDE_SRC/rules" ]; then
+        mkdir -p "$CLAUDE_DIR/rules"
+        for rule in "$CLAUDE_SRC"/rules/*.md; do
+            name="$(basename "$rule")"
+            dest="$CLAUDE_DIR/rules/$name"
+            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$rule")" ]; then
+                ok "claude/rules/$name already linked"
+            else
+                backup_file "$dest"
+                ln -sf "$rule" "$dest"
+                ok "claude/rules/$name → $rule"
+            fi
+        done
+    fi
 
     # Settings: copy template ONLY if no settings.json exists
     if [ ! -f "$CLAUDE_DIR/settings.json" ]; then
