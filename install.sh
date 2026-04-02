@@ -102,8 +102,6 @@ if [ -d "$CLAUDE_SRC" ]; then
     info "Setting up Claude Code config..."
 
     mkdir -p "$CLAUDE_DIR/agents"
-    mkdir -p "$CLAUDE_DIR/skills/tdd"
-    mkdir -p "$CLAUDE_DIR/skills/improve-structure"
 
     # Symlink CLAUDE.md and statusline
     for file in CLAUDE.md statusline-command.sh; do
@@ -146,6 +144,27 @@ if [ -d "$CLAUDE_SRC" ]; then
                 ok "claude/skills/$skill_name → $src"
             fi
         fi
+        # Symlink skill subdirectories (e.g., reference/)
+        for sub_dir in "$skill_dir"*/; do
+            sub_name="$(basename "$sub_dir")"
+            [ "$sub_name" = "*" ] && continue
+            dest_sub="$CLAUDE_DIR/skills/$skill_name/$sub_name"
+            if [ -L "$dest_sub" ] && [ "$(readlink -f "$dest_sub")" = "$(readlink -f "$sub_dir")" ]; then
+                ok "claude/skills/$skill_name/$sub_name already linked"
+            elif [ -d "$dest_sub" ] && [ ! -L "$dest_sub" ]; then
+                # Real directory exists — back up and replace with symlink
+                mkdir -p "$BACKUP_DIR"
+                cp -a "$dest_sub" "$BACKUP_DIR/"
+                warn "Backed up $dest_sub → $BACKUP_DIR/$sub_name"
+                rm -rf "$dest_sub"
+                ln -sf "$sub_dir" "$dest_sub"
+                ok "claude/skills/$skill_name/$sub_name → $sub_dir"
+            else
+                backup_file "$dest_sub"
+                ln -sf "$sub_dir" "$dest_sub"
+                ok "claude/skills/$skill_name/$sub_name → $sub_dir"
+            fi
+        done
     done
 
     # Symlink hook scripts
