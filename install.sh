@@ -93,15 +93,14 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Claude Code (agents, skills, hooks, commands, rules, statusline)
+# 5. Claude Code (CLAUDE.md, hooks, statusline, settings)
+#    Skills, agents, commands, and rules are in /vault/code/claude-skills/
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
 CLAUDE_SRC="$DOTFILES_DIR/claude"
 
 if [ -d "$CLAUDE_SRC" ]; then
     info "Setting up Claude Code config..."
-
-    mkdir -p "$CLAUDE_DIR/agents"
 
     # Symlink CLAUDE.md and statusline
     for file in CLAUDE.md statusline-command.sh; do
@@ -116,57 +115,6 @@ if [ -d "$CLAUDE_SRC" ]; then
         fi
     done
 
-    # Symlink agents
-    for agent in "$CLAUDE_SRC"/agents/*.md; do
-        name="$(basename "$agent")"
-        dest="$CLAUDE_DIR/agents/$name"
-        if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$agent")" ]; then
-            ok "claude/agents/$name already linked"
-        else
-            backup_file "$dest"
-            ln -sf "$agent" "$dest"
-            ok "claude/agents/$name → $agent"
-        fi
-    done
-
-    # Symlink skills
-    for skill_dir in "$CLAUDE_SRC"/skills/*/; do
-        skill_name="$(basename "$skill_dir")"
-        src="$skill_dir/SKILL.md"
-        dest="$CLAUDE_DIR/skills/$skill_name/SKILL.md"
-        if [ -f "$src" ]; then
-            mkdir -p "$CLAUDE_DIR/skills/$skill_name"
-            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$src")" ]; then
-                ok "claude/skills/$skill_name already linked"
-            else
-                backup_file "$dest"
-                ln -sf "$src" "$dest"
-                ok "claude/skills/$skill_name → $src"
-            fi
-        fi
-        # Symlink skill subdirectories (e.g., reference/)
-        for sub_dir in "$skill_dir"*/; do
-            sub_name="$(basename "$sub_dir")"
-            [ "$sub_name" = "*" ] && continue
-            dest_sub="$CLAUDE_DIR/skills/$skill_name/$sub_name"
-            if [ -L "$dest_sub" ] && [ "$(readlink -f "$dest_sub")" = "$(readlink -f "$sub_dir")" ]; then
-                ok "claude/skills/$skill_name/$sub_name already linked"
-            elif [ -d "$dest_sub" ] && [ ! -L "$dest_sub" ]; then
-                # Real directory exists — back up and replace with symlink
-                mkdir -p "$BACKUP_DIR"
-                cp -a "$dest_sub" "$BACKUP_DIR/"
-                warn "Backed up $dest_sub → $BACKUP_DIR/$sub_name"
-                rm -rf "$dest_sub"
-                ln -sf "$sub_dir" "$dest_sub"
-                ok "claude/skills/$skill_name/$sub_name → $sub_dir"
-            else
-                backup_file "$dest_sub"
-                ln -sf "$sub_dir" "$dest_sub"
-                ok "claude/skills/$skill_name/$sub_name → $sub_dir"
-            fi
-        done
-    done
-
     # Symlink hook scripts
     if [ -d "$CLAUDE_SRC/hooks/scripts" ]; then
         mkdir -p "$CLAUDE_DIR/hooks/scripts"
@@ -179,38 +127,6 @@ if [ -d "$CLAUDE_SRC" ]; then
                 backup_file "$dest"
                 ln -sf "$script" "$dest"
                 ok "claude/hooks/scripts/$name → $script"
-            fi
-        done
-    fi
-
-    # Symlink commands
-    if [ -d "$CLAUDE_SRC/commands" ]; then
-        mkdir -p "$CLAUDE_DIR/commands"
-        for cmd in "$CLAUDE_SRC"/commands/*.md; do
-            name="$(basename "$cmd")"
-            dest="$CLAUDE_DIR/commands/$name"
-            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$cmd")" ]; then
-                ok "claude/commands/$name already linked"
-            else
-                backup_file "$dest"
-                ln -sf "$cmd" "$dest"
-                ok "claude/commands/$name → $cmd"
-            fi
-        done
-    fi
-
-    # Symlink rules
-    if [ -d "$CLAUDE_SRC/rules" ]; then
-        mkdir -p "$CLAUDE_DIR/rules"
-        for rule in "$CLAUDE_SRC"/rules/*.md; do
-            name="$(basename "$rule")"
-            dest="$CLAUDE_DIR/rules/$name"
-            if [ -L "$dest" ] && [ "$(readlink -f "$dest")" = "$(readlink -f "$rule")" ]; then
-                ok "claude/rules/$name already linked"
-            else
-                backup_file "$dest"
-                ln -sf "$rule" "$dest"
-                ok "claude/rules/$name → $rule"
             fi
         done
     fi
