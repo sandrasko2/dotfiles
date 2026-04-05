@@ -6,36 +6,65 @@ $git_branch\
 $git_status\
 $python\
 $docker_context\
-$kubernetes\
+$terraform\
 $cmd_duration\
 $line_break\
 $character"""
 
 [character]
-success_symbol = "[>](bold green)"
-error_symbol = "[>](bold red)"
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
 
 [directory]
-truncation_length = 3
-truncate_to_repo = true
+style = "bold cyan"
+truncation_length = 0
+truncate_to_repo = false
+read_only = " 󰌾"
 
 [git_branch]
-format = "[$branch]($style) "
+symbol = " "
+style = "bold purple"
+format = "[$symbol$branch]($style) "
 
 [git_status]
-format = '([$all_status$ahead_behind]($style) )'
+style = "bold yellow"
+format = '([$ahead_behind]($style) )'
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇡${ahead_count}⇣${behind_count}"
+
+[python]
+symbol = " "
+style = "bold yellow"
+format = '[${symbol}${version}]($style) '
+detect_files = ["pyproject.toml", ".python-version"]
+detect_extensions = []
+detect_folders = []
+
+[docker_context]
+symbol = " "
+style = "bold blue"
+format = "[$symbol$context]($style) "
+detect_files = ["compose.yml", "compose.yaml", "docker-compose.yml", "docker-compose.yaml", "Dockerfile"]
+
+[terraform]
+symbol = "󱁢 "
+style = "bold magenta"
+format = "[$symbol$workspace]($style) "
 
 [cmd_duration]
 min_time = 2_000
-format = "[$duration]($style) "
-
-[python]
-format = '[${version}]($style) '
-
-[docker_context]
-format = "[$context]($style) "
-detect_files = ["compose.yml", "docker-compose.yml", "Dockerfile"]
+style = "bold yellow"
+format = "[ $duration]($style) "
 
 [kubernetes]
-disabled = false
-format = '[$context](bold purple) '
+disabled = true
+
+[battery]
+disabled = true
+
+[username]
+disabled = true
+
+[hostname]
+disabled = true
