@@ -101,6 +101,7 @@ CLAUDE_SRC="$DOTFILES_DIR/claude"
 
 if [ -d "$CLAUDE_SRC" ]; then
     info "Setting up Claude Code config..."
+    mkdir -p "$CLAUDE_DIR"
 
     # Symlink CLAUDE.md and statusline
     for file in CLAUDE.md statusline-command.sh; do
