@@ -67,7 +67,9 @@ export BASE_DIR=/vault
 PATH=$PATH:$BASE_DIR/code/shell:~/.local/bin
 
 # Alert alias for long running commands (sleep 10; alert)
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+if command -v notify-send &>/dev/null; then
+    alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+fi
 
 # ---------------------------------------------------------------------------
 # Aliases
@@ -104,12 +106,16 @@ fi
 # ---------------------------------------------------------------------------
 # fzf integration
 # ---------------------------------------------------------------------------
-[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+if command -v fzf &>/dev/null; then
+    eval "$(fzf --bash)"
+fi
 
 # ---------------------------------------------------------------------------
 # direnv
 # ---------------------------------------------------------------------------
-eval "$(direnv hook bash)"
+if command -v direnv &>/dev/null; then
+    eval "$(direnv hook bash)"
+fi
 
 # ---------------------------------------------------------------------------
 # Local overrides (machine-specific, not tracked in git)

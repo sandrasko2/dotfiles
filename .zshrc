@@ -89,3 +89,8 @@ alias reload='source ~/.zshrc'
 if command -v direnv &>/dev/null; then
     eval "$(direnv hook zsh)"
 fi
+
+# ---------------------------------------------------------------------------
+# Local overrides (machine-specific, not tracked in git)
+# ---------------------------------------------------------------------------
+[[ -f ~/.zshrc.local ]] && source ~/.zshrc.local

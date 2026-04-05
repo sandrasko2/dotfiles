@@ -27,10 +27,17 @@ alias media='cd /mnt/storage/vault/media'
 # ---------------------------------------------------------------------------
 # File listing
 # ---------------------------------------------------------------------------
-alias ll='ls -lart'
-alias la='ls -A'
-alias lt='ls -lrt'
-alias l.='ls -d .*'
+if command -v eza &>/dev/null; then
+    alias ll='eza -la --icons --sort=modified'
+    alias la='eza -a --icons'
+    alias lt='eza -l --icons --sort=modified'
+    alias l.='eza -d --icons .*'
+else
+    alias ll='ls -lart'
+    alias la='ls -A'
+    alias lt='ls -lrt'
+    alias l.='ls -d .*'
+fi
 
 # ---------------------------------------------------------------------------
 # Docker

@@ -6,12 +6,17 @@ Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlink
 
 | File | Purpose |
 |------|---------|
-| `.bashrc` | Shell config: history, prompt with git branch, colors, shell options |
-| `.bash_aliases` | Aliases & functions: Docker, Git, Tmux, system utilities, archive extraction |
+| `.zshrc` | Primary shell config: zinit plugins, starship prompt, tool integrations |
+| `.bashrc` | Bash fallback: history, prompt with git branch, colors, shell options |
+| `.bash_aliases` | Aliases & functions: eza/ls, Docker, Git, Tmux, system utilities (shared by both shells) |
+| `.profile` | Bash login shell bootstrap — sources `.bashrc` |
+| `.zprofile` | Zsh login shell bootstrap — sets PATH and BASE_DIR |
 | `.inputrc` | Readline: case-insensitive completion, prefix history search, word navigation |
 | `.vimrc` | Vim IDE-lite: vim-plug, 12 plugins (NERDTree, fzf, gruvbox, airline, etc.) |
+| `.config/nvim/` | Neovim config: Lazy.nvim, Lua-based setup |
 | `.tmux.conf` | Tmux: Ctrl-a prefix, vim nav, mouse, TPM with resurrect/continuum |
-| `.gitconfig` | Git: aliases, vimdiff, sensible defaults, local include for identity |
+| `.gitconfig` | Git: aliases, delta pager, vimdiff, sensible defaults, local include for identity |
+| `starship.toml` | Starship prompt: two-line layout with Nerd Font icons |
 | `install.sh` | Bootstrap: symlinks dotfiles, installs vim-plug, TPM, fzf |
 
 ## Quick Start
@@ -20,13 +25,14 @@ Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlink
 git clone <repo-url> /vault/dotfiles
 cd /vault/dotfiles
 ./install.sh
-source ~/.bashrc
+exec zsh
 vim +PlugInstall +qall
 ```
 
 ## Prerequisites
 
-- **bash** 4.0+
+- **zsh** 5.8+ (primary shell)
+- **bash** 4.0+ (fallback)
 - **git**
 - **curl**
 - **vim** (vim-plug installs plugins automatically)
@@ -36,14 +42,18 @@ vim +PlugInstall +qall
 
 These files are **not tracked** in git — create them per machine:
 
-### `~/.bashrc.local`
+### `~/.zshrc.local`
 
-Extra PATH entries, environment variables, or aliases specific to one machine.
+Zsh-specific overrides: extra PATH entries, environment variables, or aliases for one machine.
 
-```bash
+```zsh
 export KUBECONFIG=~/.kube/config
 alias proj='cd /home/user/projects'
 ```
+
+### `~/.bashrc.local`
+
+Same as above, for bash sessions.
 
 ### `~/.gitconfig.local`
 
@@ -105,6 +115,7 @@ Deployment is managed by the Ansible repo via a systemd timer that runs
 | `gd` / `gds` | `git diff` / `diff --staged` |
 | `gl` / `glg` | `git log` / log graph |
 | `ta` / `tls` / `tn` | tmux attach / list / new |
+| `ll` / `la` / `lt` | File listing (eza with icons where available, ls fallback) |
 | `ports` | `ss -tulnp` |
 | `extract` | Universal archive extractor |
 | `mkcd` | mkdir + cd |

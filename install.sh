@@ -17,6 +17,8 @@ FILES=(
     .tmux.conf
     .gitconfig
     .zshrc
+    .profile
+    .zprofile
 )
 
 # ---------------------------------------------------------------------------
@@ -100,16 +102,33 @@ if command -v fzf &>/dev/null; then
     ok "fzf already installed"
 elif [ -d "$HOME/.fzf" ]; then
     ok "fzf directory exists, running install..."
-    "$HOME/.fzf/install" --key-bindings --completion --no-update-rc --no-bash --no-zsh --no-fish
+    "$HOME/.fzf/install" --key-bindings --completion --no-update-rc
 else
     info "Installing fzf..."
     git clone --depth 1 https://github.com/junegunn/fzf.git "$HOME/.fzf"
-    "$HOME/.fzf/install" --key-bindings --completion --no-update-rc --no-bash --no-zsh --no-fish
+    "$HOME/.fzf/install" --key-bindings --completion --no-update-rc
     ok "fzf installed"
 fi
 
 # ---------------------------------------------------------------------------
-# 6. Claude Code (CLAUDE.md, hooks, statusline, settings)
+# 6. Symlink nvim config → ~/.config/nvim
+# ---------------------------------------------------------------------------
+NVIM_SRC="$DOTFILES_DIR/.config/nvim"
+NVIM_DEST="$HOME/.config/nvim"
+
+if [ -d "$NVIM_SRC" ]; then
+    if [ -L "$NVIM_DEST" ] && [ "$(readlink -f "$NVIM_DEST")" = "$(readlink -f "$NVIM_SRC")" ]; then
+        ok "nvim config already linked"
+    else
+        mkdir -p "$HOME/.config"
+        backup_file "$NVIM_DEST"
+        ln -sfn "$NVIM_SRC" "$NVIM_DEST"
+        ok "nvim config → $NVIM_SRC"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# 7. Claude Code (CLAUDE.md, hooks, statusline, settings)
 #    Skills, agents, commands, and rules are in /vault/code/claude-skills/
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
@@ -160,13 +179,13 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Create vim undo directory
+# 8. Create vim undo directory
 # ---------------------------------------------------------------------------
 mkdir -p "$HOME/.vim/undodir"
 ok "~/.vim/undodir exists"
 
 # ---------------------------------------------------------------------------
-# 8. Done
+# 9. Done
 # ---------------------------------------------------------------------------
 echo ""
 info "Installation complete!"
