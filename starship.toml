@@ -1,0 +1,41 @@
+# ~/.config/starship.toml — managed by /vault/dotfiles
+
+format = """
+$directory\
+$git_branch\
+$git_status\
+$python\
+$docker_context\
+$kubernetes\
+$cmd_duration\
+$line_break\
+$character"""
+
+[character]
+success_symbol = "[>](bold green)"
+error_symbol = "[>](bold red)"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+
+[git_branch]
+format = "[$branch]($style) "
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+
+[cmd_duration]
+min_time = 2_000
+format = "[$duration]($style) "
+
+[python]
+format = '[${version}]($style) '
+
+[docker_context]
+format = "[$context]($style) "
+detect_files = ["compose.yml", "docker-compose.yml", "Dockerfile"]
+
+[kubernetes]
+disabled = false
+format = '[$context](bold purple) '

@@ -16,6 +16,7 @@ FILES=(
     .vimrc
     .tmux.conf
     .gitconfig
+    .zshrc
 )
 
 # ---------------------------------------------------------------------------
@@ -53,7 +54,22 @@ for file in "${FILES[@]}"; do
 done
 
 # ---------------------------------------------------------------------------
-# 2. Install vim-plug
+# 2. Symlink starship.toml → ~/.config/starship.toml
+# ---------------------------------------------------------------------------
+STARSHIP_SRC="$DOTFILES_DIR/starship.toml"
+STARSHIP_DEST="$HOME/.config/starship.toml"
+
+if [ -L "$STARSHIP_DEST" ] && [ "$(readlink -f "$STARSHIP_DEST")" = "$STARSHIP_SRC" ]; then
+    ok "starship.toml already linked"
+else
+    mkdir -p "$HOME/.config"
+    backup_file "$STARSHIP_DEST"
+    ln -sf "$STARSHIP_SRC" "$STARSHIP_DEST"
+    ok "starship.toml → $STARSHIP_SRC"
+fi
+
+# ---------------------------------------------------------------------------
+# 3. Install vim-plug
 # ---------------------------------------------------------------------------
 PLUG_FILE="$HOME/.vim/autoload/plug.vim"
 if [ -f "$PLUG_FILE" ]; then
@@ -66,7 +82,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 3. Install TPM (Tmux Plugin Manager)
+# 4. Install TPM (Tmux Plugin Manager)
 # ---------------------------------------------------------------------------
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ -d "$TPM_DIR" ]; then
@@ -78,7 +94,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Install fzf
+# 5. Install fzf
 # ---------------------------------------------------------------------------
 if command -v fzf &>/dev/null; then
     ok "fzf already installed"
@@ -93,7 +109,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Claude Code (CLAUDE.md, hooks, statusline, settings)
+# 6. Claude Code (CLAUDE.md, hooks, statusline, settings)
 #    Skills, agents, commands, and rules are in /vault/code/claude-skills/
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
@@ -144,19 +160,19 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 6. Create vim undo directory
+# 7. Create vim undo directory
 # ---------------------------------------------------------------------------
 mkdir -p "$HOME/.vim/undodir"
 ok "~/.vim/undodir exists"
 
 # ---------------------------------------------------------------------------
-# 7. Done
+# 8. Done
 # ---------------------------------------------------------------------------
 echo ""
 info "Installation complete!"
 echo ""
 echo "Next steps:"
-echo "  1. Reload shell:           source ~/.bashrc"
+echo "  1. Reload shell:           exec zsh"
 echo "  2. Install vim plugins:    vim +PlugInstall +qall"
 echo "  3. Install tmux plugins:   tmux new -s init   then   prefix + I"
 echo "  4. Set git identity in:    ~/.gitconfig.local"
