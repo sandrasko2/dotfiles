@@ -1,6 +1,8 @@
 # ~/.config/starship.toml — managed by /vault/dotfiles
 
 format = """
+$username\
+$hostname\
 $directory\
 $git_branch\
 $git_status\
@@ -9,6 +11,7 @@ $docker_context\
 $terraform\
 $cmd_duration\
 $line_break\
+$time\
 $character"""
 
 [character]
@@ -57,6 +60,12 @@ min_time = 2_000
 style = "bold yellow"
 format = "[ $duration]($style) "
 
+[time]
+disabled = false
+style = "bold dimmed white"
+format = "[$time]($style) "
+time_format = "%H:%M"
+
 [kubernetes]
 disabled = true
 
@@ -64,7 +73,11 @@ disabled = true
 disabled = true
 
 [username]
-disabled = true
+show_always = true
+style_user = "bold green"
+format = "[$user]($style)"
 
 [hostname]
-disabled = true
+ssh_only = false
+style = "bold green"
+format = "[@$hostname]($style) "

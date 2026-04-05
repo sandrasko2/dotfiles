@@ -55,6 +55,23 @@ if command -v fzf &>/dev/null; then
 fi
 
 # ---------------------------------------------------------------------------
+# Base directory (needed by shared aliases)
+# ---------------------------------------------------------------------------
+export BASE_DIR=/vault
+
+# ---------------------------------------------------------------------------
+# Colors
+# ---------------------------------------------------------------------------
+if command -v dircolors &>/dev/null; then
+    eval "$(dircolors -b)"
+fi
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+
+# ---------------------------------------------------------------------------
 # Aliases
 # ---------------------------------------------------------------------------
 alias dc-dev='docker compose -f compose.yml -f compose.dev.yml'
@@ -62,6 +79,9 @@ alias dc-prod='docker compose -f compose.yml -f compose.prod.yml'
 
 # Source bash aliases if they exist (shared between bash and zsh)
 [[ -f ~/.bash_aliases ]] && source ~/.bash_aliases
+
+# Override reload to source zsh config instead of bash
+alias reload='source ~/.zshrc'
 
 # ---------------------------------------------------------------------------
 # Direnv
