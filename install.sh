@@ -71,7 +71,21 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 3. Install vim-plug
+# 3. Symlink dircolors.dracula → ~/.dircolors
+# ---------------------------------------------------------------------------
+DIRCOLORS_SRC="$DOTFILES_DIR/dircolors.dracula"
+DIRCOLORS_DEST="$HOME/.dircolors"
+
+if [ -L "$DIRCOLORS_DEST" ] && [ "$(readlink -f "$DIRCOLORS_DEST")" = "$DIRCOLORS_SRC" ]; then
+    ok "dircolors.dracula already linked"
+else
+    backup_file "$DIRCOLORS_DEST"
+    ln -sf "$DIRCOLORS_SRC" "$DIRCOLORS_DEST"
+    ok "dircolors.dracula → $DIRCOLORS_SRC"
+fi
+
+# ---------------------------------------------------------------------------
+# 4. Install vim-plug
 # ---------------------------------------------------------------------------
 PLUG_FILE="$HOME/.vim/autoload/plug.vim"
 if [ -f "$PLUG_FILE" ]; then
@@ -84,7 +98,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Install TPM (Tmux Plugin Manager)
+# 5. Install TPM (Tmux Plugin Manager)
 # ---------------------------------------------------------------------------
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ -d "$TPM_DIR" ]; then
@@ -96,7 +110,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Install fzf
+# 6. Install fzf
 # ---------------------------------------------------------------------------
 if command -v fzf &>/dev/null; then
     ok "fzf already installed"
@@ -111,7 +125,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 6. Symlink nvim config → ~/.config/nvim
+# 7. Symlink nvim config → ~/.config/nvim
 # ---------------------------------------------------------------------------
 NVIM_SRC="$DOTFILES_DIR/.config/nvim"
 NVIM_DEST="$HOME/.config/nvim"
@@ -128,7 +142,7 @@ if [ -d "$NVIM_SRC" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Claude Code (CLAUDE.md, hooks, statusline, settings)
+# 8. Claude Code (CLAUDE.md, hooks, statusline, settings)
 #    Skills, agents, commands, and rules are in /vault/code/claude-skills/
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
@@ -179,13 +193,13 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 8. Create vim undo directory
+# 9. Create vim undo directory
 # ---------------------------------------------------------------------------
 mkdir -p "$HOME/.vim/undodir"
 ok "~/.vim/undodir exists"
 
 # ---------------------------------------------------------------------------
-# 9. Done
+# 10. Done
 # ---------------------------------------------------------------------------
 echo ""
 info "Installation complete!"

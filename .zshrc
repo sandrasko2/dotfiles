@@ -63,7 +63,7 @@ export BASE_DIR=/vault
 # Colors
 # ---------------------------------------------------------------------------
 if command -v dircolors &>/dev/null; then
-    eval "$(dircolors -b)"
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
 fi
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
