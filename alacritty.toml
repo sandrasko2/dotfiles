@@ -75,3 +75,25 @@ white   = "#ffffff"
 key = "N"
 mods = "Control|Shift"
 action = "CreateNewWindow"
+
+# Prev/next tmux window
+# Mac: Cmd+Shift+{ / Cmd+Shift+}   Linux: Ctrl+Shift+{ / Ctrl+Shift+}
+[[keyboard.bindings]]
+key = "LeftBracket"
+mods = "Super|Shift"
+chars = "\u0001p"
+
+[[keyboard.bindings]]
+key = "RightBracket"
+mods = "Super|Shift"
+chars = "\u0001n"
+
+[[keyboard.bindings]]
+key = "LeftBracket"
+mods = "Control|Shift"
+chars = "\u0001p"
+
+[[keyboard.bindings]]
+key = "RightBracket"
+mods = "Control|Shift"
+chars = "\u0001n"
