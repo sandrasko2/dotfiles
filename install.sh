@@ -11,7 +11,8 @@ BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 # Files to symlink (relative to DOTFILES_DIR → $HOME)
 FILES=(
     .bashrc
-    .bash_aliases
+    .aliases
+    .env.sh
     .inputrc
     .vimrc
     .tmux.conf
@@ -71,7 +72,24 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 3. Symlink dircolors.dracula → ~/.dircolors
+# 3. Symlink alacritty.toml → ~/.config/alacritty/alacritty.toml
+# ---------------------------------------------------------------------------
+ALACRITTY_SRC="$DOTFILES_DIR/alacritty.toml"
+ALACRITTY_DEST="$HOME/.config/alacritty/alacritty.toml"
+
+if [ -f "$ALACRITTY_SRC" ]; then
+    if [ -L "$ALACRITTY_DEST" ] && [ "$(readlink -f "$ALACRITTY_DEST")" = "$ALACRITTY_SRC" ]; then
+        ok "alacritty.toml already linked"
+    else
+        mkdir -p "$HOME/.config/alacritty"
+        backup_file "$ALACRITTY_DEST"
+        ln -sf "$ALACRITTY_SRC" "$ALACRITTY_DEST"
+        ok "alacritty.toml → $ALACRITTY_SRC"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# 4. Symlink dircolors.dracula → ~/.dircolors (legacy — kept for servers without eza)
 # ---------------------------------------------------------------------------
 DIRCOLORS_SRC="$DOTFILES_DIR/dircolors.dracula"
 DIRCOLORS_DEST="$HOME/.dircolors"
@@ -85,7 +103,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 4. Install vim-plug
+# 5. Install vim-plug
 # ---------------------------------------------------------------------------
 PLUG_FILE="$HOME/.vim/autoload/plug.vim"
 if [ -f "$PLUG_FILE" ]; then
@@ -98,7 +116,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 5. Install TPM (Tmux Plugin Manager)
+# 6. Install TPM (Tmux Plugin Manager)
 # ---------------------------------------------------------------------------
 TPM_DIR="$HOME/.tmux/plugins/tpm"
 if [ -d "$TPM_DIR" ]; then
@@ -110,7 +128,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 6. Install fzf
+# 7. Install fzf
 # ---------------------------------------------------------------------------
 if command -v fzf &>/dev/null; then
     ok "fzf already installed"
@@ -125,7 +143,7 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 7. Symlink nvim config → ~/.config/nvim
+# 8. Symlink nvim config → ~/.config/nvim
 # ---------------------------------------------------------------------------
 NVIM_SRC="$DOTFILES_DIR/.config/nvim"
 NVIM_DEST="$HOME/.config/nvim"
@@ -142,7 +160,7 @@ if [ -d "$NVIM_SRC" ]; then
 fi
 
 # ---------------------------------------------------------------------------
-# 8. Claude Code (CLAUDE.md, hooks, statusline, settings)
+# 9. Claude Code (CLAUDE.md, hooks, statusline, settings)
 #    Skills, agents, commands, and rules are in /vault/code/claude-skills/
 # ---------------------------------------------------------------------------
 CLAUDE_DIR="$HOME/.claude"
@@ -193,13 +211,13 @@ else
 fi
 
 # ---------------------------------------------------------------------------
-# 9. Create vim undo directory
+# 10. Create vim undo directory
 # ---------------------------------------------------------------------------
 mkdir -p "$HOME/.vim/undodir"
 ok "~/.vim/undodir exists"
 
 # ---------------------------------------------------------------------------
-# 10. Done
+# 11. Done
 # ---------------------------------------------------------------------------
 echo ""
 info "Installation complete!"

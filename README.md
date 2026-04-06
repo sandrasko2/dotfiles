@@ -6,11 +6,13 @@ Personal dotfiles for a DevOps/development/homelab workflow. Managed via symlink
 
 | File | Purpose |
 |------|---------|
+| `.env.sh` | Shared environment: OS detection, BASE_DIR, PATH (with dedup), EZA_COLORS palette |
 | `.zshrc` | Primary shell config: zinit plugins, starship prompt, tool integrations |
-| `.bashrc` | Bash fallback: history, prompt with git branch, colors, shell options |
-| `.bash_aliases` | Aliases & functions: eza/ls, Docker, Git, Tmux, system utilities (shared by both shells) |
-| `.profile` | Bash login shell bootstrap — sources `.bashrc` |
-| `.zprofile` | Zsh login shell bootstrap — sets PATH and BASE_DIR |
+| `.bashrc` | Bash fallback: history, prompt with git branch, shell options |
+| `.aliases` | Aliases & functions: eza/ls, Docker, Git, Tmux, system utilities (shared by both shells) |
+| `.profile` | Bash login shell bootstrap — sources `.env.sh` and `.bashrc` |
+| `.zprofile` | Zsh login shell bootstrap — sources `.env.sh` |
+| `alacritty.toml` | Alacritty terminal: Dracula colors, JetBrainsMono Nerd Font, tmux-friendly |
 | `.inputrc` | Readline: case-insensitive completion, prefix history search, word navigation |
 | `.vimrc` | Vim IDE-lite: vim-plug, 12 plugins (NERDTree, fzf, gruvbox, airline, etc.) |
 | `.config/nvim/` | Neovim config: Lazy.nvim, Lua-based setup |

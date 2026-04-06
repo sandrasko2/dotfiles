@@ -7,6 +7,11 @@ case $- in
 esac
 
 # ---------------------------------------------------------------------------
+# Shared environment (BASE_DIR, PATH, EZA_COLORS, OS detection)
+# ---------------------------------------------------------------------------
+[ -f ~/.env.sh ] && . ~/.env.sh
+
+# ---------------------------------------------------------------------------
 # History
 # ---------------------------------------------------------------------------
 HISTCONTROL=ignoreboth
@@ -26,21 +31,16 @@ shopt -s autocd
 shopt -s cmdhist
 shopt -s no_empty_cmd_completion
 
-# make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
 
 # ---------------------------------------------------------------------------
-# Color support
+# Colors (grep/diff — ls handled by .aliases via eza)
 # ---------------------------------------------------------------------------
-if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-    alias diff='diff --color=auto'
-    alias ip='ip -color=auto'
-fi
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
+alias diff='diff --color=auto'
+alias ip='ip -color=auto'
 
 # ---------------------------------------------------------------------------
 # Prompt — 2-line with git branch
@@ -60,12 +60,6 @@ PS1+='\[\e[0;33m\]$(__git_branch)\[\e[0m\]'  # git branch in yellow
 PS1+='\n'
 PS1+='[\A] \$ '                               # time + prompt char
 
-# ---------------------------------------------------------------------------
-# Environment
-# ---------------------------------------------------------------------------
-export BASE_DIR=/vault
-PATH=$PATH:$BASE_DIR/code/shell:~/.local/bin
-
 # Alert alias for long running commands (sleep 10; alert)
 if command -v notify-send &>/dev/null; then
     alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -74,16 +68,12 @@ fi
 # ---------------------------------------------------------------------------
 # Aliases
 # ---------------------------------------------------------------------------
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
-fi
+[ -f ~/.aliases ] && . ~/.aliases
 
 # ---------------------------------------------------------------------------
 # Functions
 # ---------------------------------------------------------------------------
-if [ -f ~/.bash_functions ]; then
-    . ~/.bash_functions
-fi
+[ -f ~/.bash_functions ] && . ~/.bash_functions
 
 # ---------------------------------------------------------------------------
 # Bash completion
@@ -97,25 +87,21 @@ if ! shopt -oq posix; then
 fi
 
 # ---------------------------------------------------------------------------
-# Nix package manager
+# Tool integrations
 # ---------------------------------------------------------------------------
 if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
     . "$HOME/.nix-profile/etc/profile.d/nix.sh"
 fi
 
-# ---------------------------------------------------------------------------
-# fzf integration
-# ---------------------------------------------------------------------------
 if command -v fzf &>/dev/null; then
     eval "$(fzf --bash)"
 fi
 
-# ---------------------------------------------------------------------------
-# direnv
-# ---------------------------------------------------------------------------
 if command -v direnv &>/dev/null; then
     eval "$(direnv hook bash)"
 fi
+
+[ -f "$HOME/.cargo/env" ] && . "$HOME/.cargo/env"
 
 # ---------------------------------------------------------------------------
 # Local overrides (machine-specific, not tracked in git)
