@@ -77,23 +77,24 @@ mods = "Control|Shift"
 action = "CreateNewWindow"
 
 # Prev/next tmux window
-# Mac: Cmd+Shift+{ / Cmd+Shift+}   Linux: Ctrl+Shift+{ / Ctrl+Shift+}
+# macOS: Cmd+Shift+{ / Cmd+Shift+}
 [[keyboard.bindings]]
-key = "LeftBracket"
-mods = "Super|Shift"
+key = "{"
+mods = "Command|Shift"
 chars = "\u0001p"
 
 [[keyboard.bindings]]
-key = "RightBracket"
-mods = "Super|Shift"
+key = "}"
+mods = "Command|Shift"
 chars = "\u0001n"
 
+# Linux: Ctrl+Shift+[ / Ctrl+Shift+]
 [[keyboard.bindings]]
-key = "LeftBracket"
+key = "LBracket"
 mods = "Control|Shift"
 chars = "\u0001p"
 
 [[keyboard.bindings]]
-key = "RightBracket"
+key = "RBracket"
 mods = "Control|Shift"
 chars = "\u0001n"
