@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# chezmoi run_once: set up external symlinks for opencode and claude-skills
+{{ if .has_vault -}}
+set -euo pipefail
+
+info()  { printf '\033[1;34m[INFO]\033[0m  %s\n' "$1"; }
+ok()    { printf '\033[1;32m[OK]\033[0m    %s\n' "$1"; }
+
+OPENCODE_DIR="$HOME/.config/opencode"
+SKILLS_SRC="{{ .vault_base }}/code/claude-skills"
+mkdir -p "$OPENCODE_DIR"
+
+# ---------------------------------------------------------------------------
+# Symlink agents and commands from claude-skills
+# ---------------------------------------------------------------------------
+for subdir in agents commands; do
+    src="$SKILLS_SRC/$subdir"
+    dest="$OPENCODE_DIR/$subdir"
+    if [ -d "$src" ]; then
+        ln -sfn "$src" "$dest"
+        ok "opencode/$subdir -> $src"
+    fi
+done
+
+# ---------------------------------------------------------------------------
+# Symlink skills from multiple sources into opencode/skills/
+# ---------------------------------------------------------------------------
+mkdir -p "$OPENCODE_DIR/skills"
+
+# Skills from infra repo
+if [ -d "{{ .vault_base }}/code/infra/.claude/skills" ]; then
+    for skill_dir in "{{ .vault_base }}/code/infra/.claude/skills"/*/; do
+        [ -d "$skill_dir" ] || continue
+        name="$(basename "$skill_dir")"
+        ln -sfn "$skill_dir" "$OPENCODE_DIR/skills/$name"
+        ok "opencode/skills/$name -> $skill_dir"
+    done
+fi
+
+# Skills from user claude config
+if [ -d "$HOME/.claude/skills" ]; then
+    for skill_dir in "$HOME/.claude/skills"/*/; do
+        [ -d "$skill_dir" ] || continue
+        name="$(basename "$skill_dir")"
+        ln -sfn "$skill_dir" "$OPENCODE_DIR/skills/$name"
+        ok "opencode/skills/$name -> $skill_dir"
+    done
+fi
+
+info "OpenCode symlinks configured"
+{{ else -}}
+echo "Vault not available — skipping opencode symlinks"
+{{ end -}}

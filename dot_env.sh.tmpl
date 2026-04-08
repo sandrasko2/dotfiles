@@ -14,7 +14,7 @@ esac
 # ---------------------------------------------------------------------------
 # Base directory
 # ---------------------------------------------------------------------------
-export BASE_DIR=/vault
+export BASE_DIR={{ .vault_base }}
 
 # ---------------------------------------------------------------------------
 # PATH (with deduplication guard)
@@ -27,7 +27,9 @@ _add_to_path() {
 }
 
 _add_to_path "$HOME/.local/bin"
-_add_to_path "$BASE_DIR/code/shell"
+{{ if .has_vault -}}
+_add_to_path "{{ .vault_base }}/code/shell"
+{{ end -}}
 export PATH
 unset -f _add_to_path
 

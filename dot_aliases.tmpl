@@ -11,19 +11,21 @@ alias cp='cp -i'
 # ---------------------------------------------------------------------------
 # Navigation / directories
 # ---------------------------------------------------------------------------
-alias vault='cd /vault'
+{{ if .has_vault -}}
+alias vault='cd {{ .vault_base }}'
 alias storage='cd /mnt/storage/vault'
 alias back='cd $BASE_DIR/backups'
 alias code='cd $BASE_DIR/code'
 alias xlog='cd $BASE_DIR/logs'
-alias xsh='cd /vault/code/shell'
+alias xsh='cd {{ .vault_base }}/code/shell'
 alias ddata='cd $BASE_DIR/docker-data'
-if [ "$(hostname)" = "hl-ubsrv-media-01" ]; then
-    alias dfiles='cd /vault/docker-files/traefik'
-else
-    alias dfiles='cd /vault/docker-files/monolith'
-fi
+{{ if eq .chezmoi.hostname "hl-ubsrv-media-01" -}}
+alias dfiles='cd {{ .vault_base }}/docker-files/traefik'
+{{ else -}}
+alias dfiles='cd {{ .vault_base }}/docker-files/monolith'
+{{ end -}}
 alias media='cd /mnt/storage/vault/media'
+{{ end -}}
 
 # ---------------------------------------------------------------------------
 # File listing (EZA_COLORS set in .env.sh)
@@ -50,7 +52,7 @@ alias dcupd='docker compose up -d'
 alias ddown='docker compose down'
 alias dlogs='docker logs'
 alias dclogs='docker compose logs -f'
-alias dps='docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"'
+alias dps='docker ps --format "table {{`{{`}}.Names{{`}}`}}\t{{`{{`}}.Status{{`}}`}}\t{{`{{`}}.Ports{{`}}`}}"'
 alias dexec='docker exec -it'
 alias drm='docker container rm'
 alias dstop='docker container stop'

@@ -1,0 +1,5 @@
+git_name: "stephen.andrasko"
+git_email: "sda@andraskolabs.com"
+vault_base: "/vault"
+ollama_base_url: "http://10.0.100.40:11434/v1"
+has_vault: true

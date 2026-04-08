@@ -1,0 +1,8 @@
+# Non-chezmoi files in source dir that shouldn't be deployed
+README.md
+CHEATSHEET.md
+openspec/**
+
+# Legacy dirs still on disk (symlinks from claude-skills, untracked opencode/)
+claude/**
+opencode/**

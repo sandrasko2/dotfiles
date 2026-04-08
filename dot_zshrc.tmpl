@@ -1,4 +1,4 @@
-# ~/.zshrc — managed by /vault/dotfiles
+# ~/.zshrc — managed by chezmoi
 
 # ---------------------------------------------------------------------------
 # History
@@ -81,3 +81,6 @@ fi
 # Local overrides (machine-specific, not tracked in git)
 # ---------------------------------------------------------------------------
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
+
+# opencode
+export PATH={{ .chezmoi.homeDir }}/.opencode/bin:$PATH

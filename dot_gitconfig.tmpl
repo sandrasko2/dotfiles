@@ -1,6 +1,3 @@
-[include]
-    path = ~/.gitconfig.local
-
 [core]
     editor = vim
     autocrlf = input
@@ -50,5 +47,5 @@
 [color]
     ui = auto
 [user]
-	name = stephen.andrasko
-	email = sda@andraskolabs.com
+    name = {{ .git_name }}
+    email = {{ .git_email }}
