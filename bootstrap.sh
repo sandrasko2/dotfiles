@@ -23,30 +23,26 @@ fi
 
 echo "==> chezmoi: $(chezmoi --version)"
 
-# ---------- write chezmoi config (skip if exists) ----------
+# ---------- write chezmoi config ----------
 CHEZMOI_CONFIG="$HOME/.config/chezmoi/chezmoi.toml"
-if [ ! -f "$CHEZMOI_CONFIG" ]; then
-  echo "==> Writing $CHEZMOI_CONFIG"
-  mkdir -p "$(dirname "$CHEZMOI_CONFIG")"
+echo "==> Writing $CHEZMOI_CONFIG"
+mkdir -p "$(dirname "$CHEZMOI_CONFIG")"
 
-  if [ -d /vault ]; then
-    HAS_VAULT=true
-    VAULT_BASE="/vault"
-  else
-    HAS_VAULT=false
-    VAULT_BASE="$HOME"
-  fi
+if [ -d /vault ]; then
+  HAS_VAULT=true
+  VAULT_BASE="/vault"
+else
+  HAS_VAULT=false
+  VAULT_BASE="$HOME"
+fi
 
-  cat > "$CHEZMOI_CONFIG" << EOF
-sourceDir = "$DOTFILES_DIR"
+cat > "$CHEZMOI_CONFIG" << EOF
+sourceDir = "$SCRIPT_DIR"
 
 [data]
   has_vault = $HAS_VAULT
   vault_base = "$VAULT_BASE"
 EOF
-else
-  echo "==> $CHEZMOI_CONFIG already exists, skipping"
-fi
 
 # ---------- remove dangling symlinks ----------
 echo "==> Cleaning dangling symlinks..."
