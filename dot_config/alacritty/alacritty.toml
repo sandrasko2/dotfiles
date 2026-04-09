@@ -81,20 +81,20 @@ action = "CreateNewWindow"
 [[keyboard.bindings]]
 key = "{"
 mods = "Command|Shift"
-chars = "\u0001p"
+chars = "\u0000p"
 
 [[keyboard.bindings]]
 key = "}"
 mods = "Command|Shift"
-chars = "\u0001n"
+chars = "\u0000n"
 
 # Linux: Ctrl+Shift+[ / Ctrl+Shift+]
 [[keyboard.bindings]]
 key = "LBracket"
 mods = "Control|Shift"
-chars = "\u0001p"
+chars = "\u0000p"
 
 [[keyboard.bindings]]
 key = "RBracket"
 mods = "Control|Shift"
-chars = "\u0001n"
+chars = "\u0000n"
