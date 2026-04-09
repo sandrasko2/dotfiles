@@ -15,7 +15,7 @@ Personal dotfiles for a DevOps/development/homelab workflow. Managed with [chezm
 | `dot_gitconfig.tmpl` | `~/.gitconfig` | Git: aliases, delta pager, vimdiff, sensible defaults, templated identity |
 | `dot_inputrc` | `~/.inputrc` | Readline: case-insensitive completion, prefix history search, word navigation |
 | `dot_vimrc` | `~/.vimrc` | Vim IDE-lite: vim-plug, 12 plugins (NERDTree, fzf, gruvbox, airline, etc.) |
-| `dot_tmux.conf` | `~/.tmux.conf` | Tmux: Ctrl-a prefix, vim nav, mouse, TPM with resurrect/continuum |
+| `dot_tmux.conf` | `~/.tmux.conf` | Tmux: Ctrl-Space prefix, vim nav, mouse, TPM with resurrect/continuum |
 | `dot_dircolors` | `~/.dircolors` | Dracula LS_COLORS theme |
 | `dot_config/starship.toml` | `~/.config/starship.toml` | Starship prompt: two-line layout with Nerd Font icons |
 | `dot_config/alacritty/` | `~/.config/alacritty/` | Alacritty terminal: Dracula colors, JetBrainsMono Nerd Font, tmux-friendly |

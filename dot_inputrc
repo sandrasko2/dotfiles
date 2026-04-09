@@ -33,3 +33,6 @@ set page-completions off
 # Alt+Left/Right for word navigation (alternate terminals)
 "\e[1;3D": backward-word
 "\e[1;3C": forward-word
+
+# Ctrl-f to cycle through completions (like Tab-Tab-Tab)
+"\C-f": menu-complete
