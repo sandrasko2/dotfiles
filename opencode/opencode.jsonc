@@ -1,0 +1,54 @@
+{
+  // OpenCode Global Configuration
+  // Based on existing config + Claude patterns
+  
+  "$schema": "https://opencode.ai/config.json",
+  
+  // Instructions: reference global AGENTS.md
+  "instructions": ["~/.config/opencode/AGENTS.md"],
+  
+  // Provider configuration
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (AI Server)",
+      "options": {
+        "baseURL": "http://10.0.100.40:11434/v1"
+      },
+      "models": {
+        "qwen3:32b": { "name": "Qwen3 32B" },
+        "qwen3:14b": { "name": "Qwen3 14B" },
+        "llama3.3:70b": { "name": "Llama 3.3 70B" },
+        "mistral-small:24b": { "name": "Mistral Small 24B" },
+        "claude-sonnet-4-6:latest": { "name": "Claude Sonnet 4.6" },
+        "gemma4:31b": { "name": "Gemma 4 31B" },
+        "phi4:14b": { "name": "Phi 4 14B" }
+      }
+    }
+  },
+  
+  // Default model
+  "model": "qwen3:32b",
+  "small_model": "qwen3:14b",
+  
+  // Permissions: deny dangerous bash commands
+  "permission": {
+    "bash": {
+      "rm *": "deny",
+      "sudo rm *": "deny",
+      "find * -delete *": "deny",
+      "find * -delete": "deny",
+      "find * -exec rm *": "deny",
+      "sudo find * -delete *": "deny",
+      "sudo find * -delete": "deny",
+      "sudo find * -exec rm *": "deny",
+      "git push --force *": "deny",
+      "git reset --hard *": "deny",
+      "git checkout -- *": "deny",
+      "git clean *": "deny"
+    }
+  },
+  
+  // Experimental features
+  "experimental": {}
+}

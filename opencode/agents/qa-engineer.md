@@ -1,0 +1,1 @@
+/vault/code/claude-skills/agents/qa-engineer.md
