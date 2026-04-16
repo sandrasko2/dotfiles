@@ -87,7 +87,7 @@ echo "   $removed dangling symlink(s) removed"
 
 # ---------- apply ----------
 echo "==> Running chezmoi apply..."
-chezmoi apply
+chezmoi apply --force
 
 echo ""
 echo "Done! Next steps:"
