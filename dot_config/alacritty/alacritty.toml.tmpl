@@ -1,7 +1,7 @@
 # ~/.config/alacritty/alacritty.toml — Dracula theme, Nerd Font, tmux-friendly
 
 [terminal]
-shell = { program = "/usr/bin/zsh", args = ["-l"] }
+shell = { program = "{{ if eq .chezmoi.os "darwin" }}/bin/zsh{{ else }}/usr/bin/zsh{{ end }}", args = ["-l"] }
 
 [env]
 TERM = "alacritty"
